@@ -5,6 +5,15 @@ import (
 	"time"
 )
 
+type Withdraw struct {
+	Platform  string
+	Amount    float64
+	Fee       float64
+	ToAddress string
+	Time      int64
+	Status    int `0提交，1失败，2成功，3取消，5已确认`
+}
+
 type Order struct {
 	Price      float64
 	Amount     float64

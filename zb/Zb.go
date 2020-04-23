@@ -4,14 +4,23 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	. "github.com/nntaoli-project/goex"
 	"log"
 	"net/http"
 	"net/url"
 	"strconv"
 	"strings"
 	"time"
+
+	. "github.com/nntaoli-project/goex"
 )
+
+type WithdrawResponse struct {
+	Page       int
+	Size       int
+	TotalCount int
+	TotalPage  int
+	List       []*Withdraw
+}
 
 const (
 	MARKET_URL = "http://api.zb.com/data/v1/"
@@ -26,6 +35,7 @@ const (
 	PLACE_ORDER_API           = "order"
 	WITHDRAW_API              = "withdraw"
 	CANCELWITHDRAW_API        = "cancelWithdraw"
+	WITHDRAW_HISTORY_API      = "getWithdrawRecord"
 )
 
 type Zb struct {
@@ -36,6 +46,51 @@ type Zb struct {
 
 func New(httpClient *http.Client, accessKey, secretKey string) *Zb {
 	return &Zb{httpClient, accessKey, secretKey}
+}
+
+func (zb *Zb) GetWithdrawHistory(currency string, page, size int) (*WithdrawResponse, error) {
+
+	params := url.Values{}
+	params.Set("method", "getWithdrawRecord")
+	params.Set("currency", currency)
+	params.Set("pageIndex", strconv.Itoa(page))
+	params.Set("pageSize", strconv.Itoa(size))
+
+	zb.buildPostForm(&params)
+
+	resp, err := HttpGet(zb.httpClient, TRADE_URL+WITHDRAW_HISTORY_API+"?"+params.Encode())
+
+	if err != nil {
+		log.Println(err)
+		return nil, err
+	}
+
+	if resp["code"] != 1000 {
+		message := resp["message"]
+		desc := message.(map[string]interface{})["desc"]
+		return nil, errors.New(desc.(string))
+	}
+
+	ret := new(WithdrawResponse)
+	ret.Page = resp["message"].(map[string]interface{})["pageIndex"].(int)
+	ret.Size = resp["message"].(map[string]interface{})["pageSize"].(int)
+	ret.TotalCount = resp["message"].(map[string]interface{})["totalCount"].(int)
+	ret.TotalPage = resp["message"].(map[string]interface{})["totalPage"].(int)
+
+	list := resp["message"].(map[string]interface{})["list"].([]map[string]interface{})
+
+	for _, row := range list {
+		ret.List = append(ret.List, &Withdraw{
+			Platform:  "zb",
+			Amount:    row["amount"].(float64),
+			Fee:       row["fees"].(float64),
+			ToAddress: row["toAddress"].(string),
+			Time:      row["submitTime"].(int64),
+			Status:    row["status"].(int),
+		})
+	}
+
+	return ret, nil
 }
 
 func (zb *Zb) GetExchangeName() string {
@@ -75,7 +130,7 @@ func (zb *Zb) GetDepth(size int, currency CurrencyPair) (*Depth, error) {
 
 	asks, isok1 := resp["asks"].([]interface{})
 	bids, isok2 := resp["bids"].([]interface{})
-	
+
 	if isok2 != true || isok1 != true {
 		return nil, errors.New("no depth data!")
 	}
