@@ -3,34 +3,20 @@ package builder
 import (
 	"context"
 	"fmt"
-	. "github.com/nntaoli-project/goex"
-	"github.com/nntaoli-project/goex/bigone"
-	"github.com/nntaoli-project/goex/binance"
-	"github.com/nntaoli-project/goex/bitfinex"
-	"github.com/nntaoli-project/goex/bithumb"
-	"github.com/nntaoli-project/goex/bitmex"
-	"github.com/nntaoli-project/goex/bitstamp"
-	"github.com/nntaoli-project/goex/bittrex"
-	"github.com/nntaoli-project/goex/coinbene"
-	"github.com/nntaoli-project/goex/fmex"
-	"github.com/nntaoli-project/goex/kucoin"
-
-	"github.com/nntaoli-project/goex/atop"
-	//"github.com/nntaoli-project/goex/coin58"
-	"github.com/nntaoli-project/goex/coinex"
-	"github.com/nntaoli-project/goex/fcoin"
-	"github.com/nntaoli-project/goex/gateio"
-	"github.com/nntaoli-project/goex/gdax"
-	"github.com/nntaoli-project/goex/hitbtc"
-	"github.com/nntaoli-project/goex/huobi"
-	"github.com/nntaoli-project/goex/kraken"
-	"github.com/nntaoli-project/goex/okex"
-	"github.com/nntaoli-project/goex/poloniex"
-	"github.com/nntaoli-project/goex/zb"
 	"net"
 	"net/http"
 	"net/url"
 	"time"
+
+	. "github.com/nntaoli-project/goex"
+	"github.com/nntaoli-project/goex/binance"
+	"github.com/nntaoli-project/goex/bitmex"
+	"github.com/nntaoli-project/goex/coinbene"
+	"github.com/nntaoli-project/goex/fmex"
+
+	"github.com/nntaoli-project/goex/huobi"
+	"github.com/nntaoli-project/goex/okex"
+	"github.com/nntaoli-project/goex/zb"
 )
 
 type APIBuilder struct {
@@ -190,74 +176,73 @@ func (builder *APIBuilder) Endpoint(endpoint string) (_builer *APIBuilder) {
 func (builder *APIBuilder) Build(exName string) (api API) {
 	var _api API
 	switch exName {
-	case KUCOIN:
-		_api = kucoin.New(builder.apiKey, builder.secretkey, builder.apiPassphrase)
+	//case KUCOIN:
+	//	_api = kucoin.New(builder.apiKey, builder.secretkey, builder.apiPassphrase)
 	//case OKCOIN_CN:
 	//	_api = okcoin.New(builder.client, builder.apiKey, builder.secretkey)
-	case POLONIEX:
-		_api = poloniex.New(builder.client, builder.apiKey, builder.secretkey)
+	//case POLONIEX:
+	//	_api = poloniex.New(builder.client, builder.apiKey, builder.secretkey)
 	//case OKCOIN_COM:
 	//	_api = okcoin.NewCOM(builder.client, builder.apiKey, builder.secretkey)
-	case BITSTAMP:
-		_api = bitstamp.NewBitstamp(builder.client, builder.apiKey, builder.secretkey, builder.clientId)
-	case HUOBI_PRO:
-		//_api = huobi.NewHuoBiProSpot(builder.client, builder.apiKey, builder.secretkey)
-		_api = huobi.NewHuobiWithConfig(&APIConfig{
-			HttpClient:   builder.client,
-			Endpoint:     builder.endPoint,
-			ApiKey:       builder.apiKey,
-			ApiSecretKey: builder.secretkey})
-	case OKEX_V3, OKEX:
-		_api = okex.NewOKEx(&APIConfig{
-			HttpClient:    builder.client,
-			ApiKey:        builder.apiKey,
-			ApiSecretKey:  builder.secretkey,
-			ApiPassphrase: builder.apiPassphrase,
-			Endpoint:      builder.endPoint,
-		})
-	case BITFINEX:
-		_api = bitfinex.New(builder.client, builder.apiKey, builder.secretkey)
-	case KRAKEN:
-		_api = kraken.New(builder.client, builder.apiKey, builder.secretkey)
-	case BINANCE:
-		//_api = binance.New(builder.client, builder.apiKey, builder.secretkey)
-		_api = binance.NewWithConfig(&APIConfig{
-			HttpClient:   builder.client,
-			Endpoint:     builder.endPoint,
-			ApiKey:       builder.apiKey,
-			ApiSecretKey: builder.secretkey})
-	case BITTREX:
-		_api = bittrex.New(builder.client, builder.apiKey, builder.secretkey)
-	case BITHUMB:
-		_api = bithumb.New(builder.client, builder.apiKey, builder.secretkey)
-	case GDAX:
-		_api = gdax.New(builder.client, builder.apiKey, builder.secretkey)
-	case GATEIO:
-		_api = gateio.New(builder.client, builder.apiKey, builder.secretkey)
+	//case BITSTAMP:
+	//	_api = bitstamp.NewBitstamp(builder.client, builder.apiKey, builder.secretkey, builder.clientId)
+	//case HUOBI_PRO:
+	//	//_api = huobi.NewHuoBiProSpot(builder.client, builder.apiKey, builder.secretkey)
+	//	_api = huobi.NewHuobiWithConfig(&APIConfig{
+	//		HttpClient:   builder.client,
+	//		Endpoint:     builder.endPoint,
+	//		ApiKey:       builder.apiKey,
+	//		ApiSecretKey: builder.secretkey})
+	//case OKEX_V3, OKEX:
+	//	_api = okex.NewOKEx(&APIConfig{
+	//		HttpClient:    builder.client,
+	//		ApiKey:        builder.apiKey,
+	//		ApiSecretKey:  builder.secretkey,
+	//		ApiPassphrase: builder.apiPassphrase,
+	//		Endpoint:      builder.endPoint,
+	//	})
+	//case BITFINEX:
+	//	_api = bitfinex.New(builder.client, builder.apiKey, builder.secretkey)
+	//case KRAKEN:
+	//	_api = kraken.New(builder.client, builder.apiKey, builder.secretkey)
+	//case BINANCE:
+	//	//_api = binance.New(builder.client, builder.apiKey, builder.secretkey)
+	//	_api = binance.NewWithConfig(&APIConfig{
+	//		HttpClient:   builder.client,
+	//		Endpoint:     builder.endPoint,
+	//		ApiKey:       builder.apiKey,
+	//		ApiSecretKey: builder.secretkey})
+	//case BITTREX:
+	//	_api = bittrex.New(builder.client, builder.apiKey, builder.secretkey)
+	//case BITHUMB:
+	//	_api = bithumb.New(builder.client, builder.apiKey, builder.secretkey)
+	//case GDAX:
+	//	_api = gdax.New(builder.client, builder.apiKey, builder.secretkey)
+	//case GATEIO:
+	//	_api = gateio.New(builder.client, builder.apiKey, builder.secretkey)
 	case ZB:
 		_api = zb.New(builder.client, builder.apiKey, builder.secretkey)
-	case COINEX:
-		_api = coinex.New(builder.client, builder.apiKey, builder.secretkey)
-	case FCOIN:
-		//	_api = fcoin.NewFCoin(builder.client, builder.apiKey, builder.secretkey)
-		_api = fcoin.NewWithConfig(&APIConfig{
-			HttpClient:   builder.client,
-			Endpoint:     builder.endPoint,
-			ApiKey:       builder.apiKey,
-			ApiSecretKey: builder.secretkey})
-	case FCOIN_MARGIN:
-		_api = fcoin.NewFcoinMargin(builder.client, builder.apiKey, builder.secretkey)
+	//case COINEX:
+	//	_api = coinex.New(builder.client, builder.apiKey, builder.secretkey)
+	//case FCOIN:
+	//	//	_api = fcoin.NewFCoin(builder.client, builder.apiKey, builder.secretkey)
+	//	_api = fcoin.NewWithConfig(&APIConfig{
+	//		HttpClient:   builder.client,
+	//		Endpoint:     builder.endPoint,
+	//		ApiKey:       builder.apiKey,
+	//		ApiSecretKey: builder.secretkey})
+	//case FCOIN_MARGIN:
+	//	_api = fcoin.NewFcoinMargin(builder.client, builder.apiKey, builder.secretkey)
 	//case COIN58:
 	//	_api = coin58.New58Coin(builder.client, builder.apiKey, builder.secretkey)
-	case BIGONE:
-		_api = bigone.New(builder.client, builder.apiKey, builder.secretkey)
-	case HITBTC:
-		_api = hitbtc.New(builder.client, builder.apiKey, builder.secretkey)
-	case ATOP:
-		_api = atop.New(builder.client, builder.apiKey, builder.secretkey)
+	//case BIGONE:
+	//	_api = bigone.New(builder.client, builder.apiKey, builder.secretkey)
+	//case HITBTC:
+	//	_api = hitbtc.New(builder.client, builder.apiKey, builder.secretkey)
+	//case ATOP:
+	//	_api = atop.New(builder.client, builder.apiKey, builder.secretkey)
 	default:
 		println("exchange name error [" + exName + "].")
-
 	}
 	return _api
 }

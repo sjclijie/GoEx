@@ -21,5 +21,5 @@ type API interface {
 
 	GetExchangeName() string
 
-	GetWithdrawHistory() ([]*Withdraw, error)
+	GetWithdrawHistory( currency string, page, size int ) (*WithdrawResponse, error)
 }

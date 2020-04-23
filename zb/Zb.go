@@ -14,14 +14,6 @@ import (
 	. "github.com/nntaoli-project/goex"
 )
 
-type WithdrawResponse struct {
-	Page       int
-	Size       int
-	TotalCount int
-	TotalPage  int
-	List       []*Withdraw
-}
-
 const (
 	MARKET_URL = "http://api.zb.com/data/v1/"
 	TICKER_API = "ticker?market=%s"

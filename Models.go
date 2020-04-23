@@ -5,6 +5,14 @@ import (
 	"time"
 )
 
+type WithdrawResponse struct {
+	Page       int
+	Size       int
+	TotalCount int
+	TotalPage  int
+	List       []*Withdraw
+}
+
 type Withdraw struct {
 	Platform  string
 	Amount    float64
